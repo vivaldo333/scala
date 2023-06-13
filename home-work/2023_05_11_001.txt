@@ -1,0 +1,43 @@
+Колеги, всім доброго ранку!
+В рамках пройденого матеріалу пропоную закріпити пройдені знання пройшовши слідучий матеріал
+https://docs.scala-lang.org/overviews/scala-book/prelude-taste-of-scala.html
+гортмаємо сторінки конпкою  NEXT  допоки не натрапимо на Сторінку FOR EXPRESSIONS)
+Обов'язково тренуємось і експерементуємо
+
+----------------------------------------------------------------------------------------------------------------------
+C:\Users\VOLODYMYR.TSYMBROVSK>scala
+Welcome to Scala 3.3.0 (11.0.19, Java Java HotSpot(TM) 64-Bit Server VM).
+Type in expressions for evaluation. Or try :help.
+
+scala> val x = 1
+val x: Int = 1
+
+scala> val y = x + 1
+val y: Int = 2
+
+scala> 2 + 2
+val res0: Int = 4
+
+scala> 3 / 3
+val res1: Int = 1
+
+scala>  res0 + res1
+val res2: Int = 5
+
+scala> val name = "John Doe"
+val name: String = John Doe
+
+scala> "hello".head
+val res3: Char = h
+
+scala> "hello".tail
+val res4: String = ello
+
+scala> "hello, world".take(5)
+val res5: String = hello
+
+scala> if (2 > 1) println("greater") else println("lesser")
+greater
+
+scala>
+--------------------------------------------------------------------------------------------------------------------

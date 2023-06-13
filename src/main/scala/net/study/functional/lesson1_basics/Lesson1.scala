@@ -100,7 +100,7 @@ object Lesson1 /*extends App*/ {
 
     //use methods from RichInt class
     val range = 1 to 10
-    range.foreach(println(x => println(x)))
+    //range.foreach(println(x => println(x)))
     range.foreach(println(_))
     range.foreach(println)
     (1 until  10).foreach(println(_))
@@ -136,9 +136,9 @@ object Lesson1 /*extends App*/ {
       def andFinally(finallyBlock: => Unit): Try[V] = try tryContainer finally Try(finallyBlock)
     }
 
-    Try(println(_)) andFinally {
-      println("Clean Up")
-    }
+    //Try(println(_)) andFinally {
+    //  println("Clean Up")
+    //}
     //--3-end------------------------
   }
 

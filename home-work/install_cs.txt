@@ -1,0 +1,12 @@
+//install "coursier"
+// https://get-coursier.io/docs/cli-installation
+// https://github.com/coursier/launchers/raw/master/cs-x86_64-pc-win32.zip
+curl -fLo cs-x86_64-pc-win32.zip https://github.com/coursier/launchers/raw/master/cs-x86_64-pc-win32.zip
+tar -xf cs-x86_64-pc-win32.zip
+move cs-x86_64-pc-win32.exe cs.exe
+.\cs --help
+
+//add SCALA_HOME into env variables
+SCALA_HOME=C:\Users\VOLODYMYR.TSYMBROVSK\AppData\Local\Coursier\data
+PATH=%SCALA_HOME%\bin;%PATH%
+
