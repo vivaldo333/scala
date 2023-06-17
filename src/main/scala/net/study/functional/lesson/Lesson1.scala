@@ -1,4 +1,4 @@
-package net.study.functional.lesson1_basics
+package net.study.functional.lesson
 
 import java.util.UUID
 import java.util.concurrent.{Executor, Executors, TimeUnit}
