@@ -1,5 +1,7 @@
 package net.study.functional.hw
 
+import net.study.functional.hw.HomeWork2.PaymentCenter.getPaymentSum
+
 object HomeWork2 extends  App {
 
   // if sum not submitted, precise in payment service.
@@ -89,7 +91,28 @@ object HomeWork2 extends  App {
     p.desc.getOrElse("technical")
   )
 
+  //2 функції в одну: compose param, потім apply
+  //compose
+
+  //спочатку apply, потім andThen
+  //andThen
+
   //Print result
   paymentWrapper.foreach(println)
   //result.foreach(println)
+
+  //---Bogdan's solution-------------------------------------------
+  val correctPayment = (id: Int, p: Option[Long]) => p orElse getPaymentSum(id)
+  val calculateTax = (tax: Option[Long], sum: Long) => tax orElse Some(if (sum > 100) sum * 20 / 100 else 0)
+
+  def correctPaymentInfo(paymentInfoDto: PaymentInfoDto): Option[PaymentInfo] = for {
+    sumCalculated <- correctPayment(paymentInfoDto.paymentId, paymentInfoDto.sum)
+    taxSum <- calculateTax(paymentInfoDto.tax, sumCalculated)
+    desc <- paymentInfoDto.desc.orElse(Some("technical"))
+  } yield PaymentInfo(paymentInfoDto.paymentId, sumCalculated, taxSum, desc)
+
+  val result2: Seq[PaymentInfo] = (payments flatMap { x => correctPaymentInfo(x) }).distinct
+  // in some cases if you need guarantee
+  //val result: Seq[PaymentInfo] = (payments flatMap { x => correctPaymentInfo(x)}).toSet.toSeq
+  result2.foreach(println)
 }
