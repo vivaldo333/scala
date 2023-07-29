@@ -175,4 +175,8 @@ object Lesson1 /*extends App*/ {
   //recursion foreach
   //tail recursion -> інтерпритується в for loop (не забиває stack), but recursion - забиває stack
   //switch case -> інтерпритується в if-else
+
+
+  //iterable - just programming pattern
+  //traversable - just "foreach" -> just goes from collection's elements
 }

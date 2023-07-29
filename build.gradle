@@ -11,8 +11,15 @@ repositories {
     mavenCentral()
 }
 
+//libraryDependencies += "org.scalatest" % "scalatest_2.11" % "2.2.1" % "test"
+
 dependencies {
     implementation group: 'org.scala-lang', name: 'scala-library', version: '2.12.16'
+    testImplementation('junit:junit:4.13.1')
+    testImplementation('org.scalatest:scalatest_2.12:3.0.5')
+    testImplementation('org.scalamock:scalamock_2.12:4.4.0')
+    //testImplementation('org.scalatest:scalatest-funsuite_2.12:3.2.0')
+    testRuntimeOnly("org.junit.vintage:junit-vintage-engine:5.8.2")
 }
 
 tasks.named('test') {

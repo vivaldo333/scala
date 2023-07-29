@@ -87,13 +87,27 @@ object RefactoredHomeWork3 extends App {
       .map(arr => SubscriberInfo(arr(0).toString, arr(1).toInt, isActive = false))
       .toList
 
-  def getBufferedData(isRisky: Boolean, source: String): Either[Error, BufferedSource] = {
+  def getBufferedData(isRisky: Boolean, source: String): Either[Error, BufferedSource] =
+    (Try(getFile(isRisky, source)) toEither).left.map {
+        case _: NetworkException => NetworkError
+        case _:Throwable => OtherError
+    }
+
+  /*def getBufferedData(isRisky: Boolean, source: String): Either[Error, BufferedSource] =
+    (Try(getFile(isRisky, source)) toEither).left.map { r =>
+      r match {
+        case _: NetworkException => NetworkError
+        case _: Throwable => OtherError
+      }
+    }*/
+
+  /*{
     try Right(getFile(isRisky, source))
     catch {
       case e: NetworkException => Left(NetworkError)
       case _: Throwable => Left(OtherError)
     }
-  }
+  }*/
 
   def getSubscribers(bufferData: BufferedSource): Either[Error, Seq[SubscriberInfo]] = {
     try Right(usingSource(bufferData)(bufferData =>

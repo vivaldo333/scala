@@ -2,7 +2,7 @@ package net.study.functional.hw
 
 import net.study.functional.hw.HomeWork2.PaymentCenter.getPaymentSum
 
-object HomeWork2 extends  App {
+object HomeWork2 extends App {
 
   // if sum not submitted, precise in payment service.
     // In case not found remove from final report.
@@ -102,8 +102,10 @@ object HomeWork2 extends  App {
   //result.foreach(println)
 
   //---Bogdan's solution-------------------------------------------
-  val correctPayment = (id: Int, p: Option[Long]) => p orElse getPaymentSum(id)
-  val calculateTax = (tax: Option[Long], sum: Long) => tax orElse Some(if (sum > 100) sum * 20 / 100 else 0)
+  lazy val correctPayment = (id: Int, p: Option[Long]) => p orElse getPaymentSum(id)
+  //def correctPayment (id: Int, p: Option[Long]) = p orElse getPaymentSum(id)
+  lazy val calculateTax = (tax: Option[Long], sum: Long) => tax orElse Some(if (sum > 100) sum * 20 / 100 else 0)
+  //def calculateTax (tax: Option[Long], sum: Long) = tax orElse Some(if (sum > 100) sum * 20 / 100 else 0)
 
   def correctPaymentInfo(paymentInfoDto: PaymentInfoDto): Option[PaymentInfo] = for {
     sumCalculated <- correctPayment(paymentInfoDto.paymentId, paymentInfoDto.sum)
