@@ -3,7 +3,7 @@ package net.study.functional.hw
 import scala.annotation.tailrec
 import scala.util.Random
 
-object HomeTask8 extends App {
+object HomeTask8 /*extends App*/ {
 
   // your products
   trait Product
