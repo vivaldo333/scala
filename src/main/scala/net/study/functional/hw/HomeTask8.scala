@@ -179,74 +179,39 @@ object HomeTask8 extends App {
 
   /////////////////////////////Implementation///////////////////////////////////////
 
-  // declare types
-  /*type PrePaymentDomain = PartialFunction[PaymentRequest, PaymentEnrichRequest]
-
-  type AlternativePaymentDomain = PartialFunction[PaymentEnrichRequest, PaymentResult]*/
-
-  // implementation PostPaymentService
-  /*def getStatusCodes(status: Status): Set[Int] = statusCodes.getOrElse(Processed, Set.empty)
-
-  val processedPostPaymentService = new PostPaymentService {
-    override def serviceStatus: Status = Processed
-
-    override def codesToProcess: Set[Int] = getStatusCodes(serviceStatus)
-  }
-
-  val clientMistakePostPaymentService = new PostPaymentService {
-    override def serviceStatus: Status = ClientMistake
-
-    override def codesToProcess: Set[Int] = getStatusCodes(serviceStatus)
-  }
-
-  val serverMistakePostPaymentService = new PostPaymentService {
-    override def serviceStatus: Status = ServerMistake
-
-    override def codesToProcess: Set[Int] = getStatusCodes(serviceStatus)
-  }
-
-  val defaultPostPaymentService = new PostPaymentService {
-    override def serviceStatus: Status = Default
-
-    override def codesToProcess: Set[Int] = Set.empty
-  }*/
-
-  //--
-  //   PaymentRequest ->
-  //   PartialFunction[PaymentRequest, PaymentResult] ->
-  //   PartialFunction[PaymentResult, PaymentStatus] ->
-  //   PaymentStatus
-
   //Test on PartialFunction
   //paymentDomain
   //postPaymentDomain
   //paymentFlow
 
-  payments
   val sortedPaymentDomains = serverPool.sortBy(_.geographicalPriority) map createPaymentDomain toList
+
   val defaultPaymentDomain: PaymentDomain = {
     case req => PaymentResult(req, PaymentResponse(-1, -1))
   }
 
   val paymentDomain = chainDomains(sortedPaymentDomains, defaultPaymentDomain)
 
-  def createPaymentDomain(server: PaymentService) : PaymentDomain = {
+  def createPaymentDomain(server: PaymentService): PaymentDomain = {
     case req if server.canProcess(req.productType) =>
-      val tokenProvider: TokenProvider = SecurityServer.generatePaymentToken(req.msisdn, _:ProductType, req.tempCode)
+      val tokenProvider: TokenProvider = SecurityServer.generatePaymentToken(req.msisdn, _: ProductType, req.tempCode)
       val paymentResponse = server.withdrawPayment(req, tokenProvider)
       PaymentResult(req, paymentResponse)
   }
 
-  val postPaymentServices = statusCodes map {postPaymentCodeTuple =>
+  val postPaymentServices = statusCodes map { postPaymentCodeTuple =>
     val (status, codes) = postPaymentCodeTuple
     new PostPaymentService {
       override def serviceStatus: Status = status
+
       override def codesToProcess: Set[Int] = codes
     }
   } toList
+
   val defaultPostPaymentDomain: PostPaymentDomain = {
     case result => PaymentStatus(result.request, Default)
   }
+
   val postPaymentDomain: PostPaymentDomain = chainDomains(postPaymentServices map createPostPaymentDomain, defaultPostPaymentDomain)
 
   def createPostPaymentDomain(postPaymentService: PostPaymentService): PostPaymentDomain = {
@@ -257,78 +222,6 @@ object HomeTask8 extends App {
 
   val paymentFlow = paymentDomain andThen postPaymentDomain
 
-  val paymentStatuses = payments map paymentFlow
-
+  val paymentStatuses: Seq[PaymentStatus] = payments map paymentFlow
   paymentStatuses.foreach(println)
-
-
-  //-- Token
-  /*def generatePaymentTokenMixParam(msisdn: String, tempCode: Int, product: Product): PaymentToken =
-    SecurityServer.generatePaymentToken(msisdn, product, tempCode)
-
-  val tokenProviderWithAllParam: String => Int => Product => PaymentToken = (generatePaymentTokenMixParam _).curried
-
-  // prepare Enum
-  val postServiceByCode: Map[Int, PostPaymentService] = Map(
-    200 -> processedPostPaymentService,
-    201 -> processedPostPaymentService,
-    202 -> processedPostPaymentService,
-    204 -> processedPostPaymentService,
-    400 -> clientMistakePostPaymentService,
-    401 -> clientMistakePostPaymentService,
-    402 -> clientMistakePostPaymentService,
-    403 -> clientMistakePostPaymentService,
-    500 -> serverMistakePostPaymentService,
-    501 -> serverMistakePostPaymentService,
-    502 -> serverMistakePostPaymentService,
-    503 -> serverMistakePostPaymentService
-  )
-
-  //--
-  case class PaymentEnrichRequest(req: PaymentRequest, server: Option[PaymentService])
-
-  def canProcessPredicate(productType: ProductType): PaymentService => Boolean =
-    service => service.canProcess(productType)
-
-  val paymentEnrichRequestFunc: PrePaymentDomain = {
-    case req if serverPool.exists(canProcessPredicate(req.productType)) =>
-      val servers = serverPool.takeWhile(canProcessPredicate(req.productType))
-      val server = if (servers.isEmpty) None else Some(servers.head)
-      PaymentEnrichRequest(req, server)
-  }
-
-  val prePaymentDomainFunc: AlternativePaymentDomain = new AlternativePaymentDomain {
-    override def isDefinedAt(enrichReq: PaymentEnrichRequest): Boolean =
-      enrichReq.server.map(server =>
-        server.withdrawPayment(enrichReq.req, tokenProviderWithAllParam(enrichReq.req.msisdn)(enrichReq.req.tempCode))).isDefined
-
-    override def apply(enrichReq: PaymentEnrichRequest): PaymentResult = {
-      val response = enrichReq.server match {
-        case Some(server) => server.withdrawPayment(enrichReq.req, tokenProviderWithAllParam(enrichReq.req.msisdn)(enrichReq.req.tempCode))
-        case _ => PaymentResponse(500, 1)
-      }
-      PaymentResult(enrichReq.req, response)
-    }
-  }*/
-  /*case enrichReq =>
-    val paymentResponse = enrichReq.server.map(server =>
-        server.withdrawPayment(enrichReq.req, tokenProviderWithAllParam(enrichReq.req.msisdn)(enrichReq.req.tempCode)))
-      .getOrElse(PaymentResponse(-1, -1))
-    PaymentResult(enrichReq.req, paymentResponse)*/
-
-  /*val postPaymentDomainFunc: PostPaymentDomain = {
-    case result if postServiceByCode.isDefinedAt(result.response.code) =>
-      val status = postServiceByCode.getOrElse(result.response.code, defaultPostPaymentService).processResult(result)
-      PaymentStatus(result.request, status)
-  }
-
-  val result: Seq[PaymentStatus] = payments.map(payment =>
-    postPaymentDomainFunc(
-      prePaymentDomainFunc(
-        paymentEnrichRequestFunc(payment)
-      )
-    )
-  )
-
-  println(result)*/
 }
