@@ -16,7 +16,6 @@ trait RequestValidator[R] {
 }
 
 object RequestValidator {
-  //form constant - for put into error
   val Name = "name"
   val Surname = "surname"
   val Login = "login"

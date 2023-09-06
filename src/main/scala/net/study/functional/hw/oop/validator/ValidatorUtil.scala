@@ -2,7 +2,6 @@ package net.study.functional.hw.oop.validator
 
 import net.study.functional.hw.oop.errors.{EmptyStringError, Error, ValidationError}
 import net.study.functional.hw.oop.services.LoginService
-import net.study.functional.hw.oop.validator.RequestValidator.Name
 
 import scala.util.matching.Regex
 
@@ -10,7 +9,8 @@ import scala.util.matching.Regex
 // if you want)
 object ValidatorUtil {
 
-  val loginService = new LoginService;
+  val loginService = new LoginService
+
   def validateStringEmptyParam(paramName: String, maybeStringEmpty: Option[String]): Either[ValidationError, Unit] = {
     if (isEmpty(maybeStringEmpty)) Left(getValidationError(paramName, EmptyStringError))
     else

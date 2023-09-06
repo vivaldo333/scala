@@ -25,20 +25,8 @@ trait RequestHandler[R, DTO, RESP] {
 
 }
 
-/*trait SignInRequestRequestHandler extends RequestHandler[SignInRequest, SignInDto, SignInResponse]
-    with Mapper[SignInRequest, SignInDto] with Processor[SignInDto, SignInResponse] {
-  this: RequestValidator[SignInRequest] with Mapper[SignInRequest, SignInDto] with Processor[SignInDto, SignInResponse] =>
-
-  override def handle(request: SignInRequest)(implicit mapperFunc: SignInRequest => SignInDto): Either[Error, SignInResponse] = ???
-}*/
-
 trait SignInRequestRequestHandler extends RequestHandler[SignInRequest, SignInDto, SignInResponse]
   with SignInRequestValidator with SignInRequestMapper with SignInRequestProcessor
-  //{
-  //override def handle(request: SignInRequest)(implicit mapperFunc: SignInRequest => SignInDto): Either[Error, SignInResponse] = ???
-  /*override def handle(request: SignInRequest)(implicit mapperFunc: SignInRequest => SignInDto): Either[Error, SignInResponse] =
-    super.handle(request)*/
-//}
 
 trait SignUpRequestHandler extends RequestHandler[SignUpRequest, SignUpDto, SignUpResponse]
   with SignUpRequestValidator with SignUpRequestMapper with SignUpRequestProcessor

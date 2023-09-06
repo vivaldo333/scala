@@ -46,12 +46,11 @@ case object NonValidPhoneLength extends Error {
 }
 
 // base trait for errors with merging effect
-// use Either to Option during combining map
 trait CombinedError[T <: CombinedError[T]] extends Error {
 
   def errors: Map[String, Error]
 
-  def +(error: T): T //could be (_+_)
+  def +(error: T): T
 
 }
 
@@ -72,7 +71,7 @@ case class ValidationError(errors: Map[String, Error]) extends CombinedError[Val
    * @return new merged combined Validation Error
    */
   override def +(error: ValidationError): ValidationError =
-    ValidationError(/*errors = */this.errors ++ error.errors)
+    ValidationError(/*errors = */ this.errors ++ error.errors)
 
   // TODO
   /**
