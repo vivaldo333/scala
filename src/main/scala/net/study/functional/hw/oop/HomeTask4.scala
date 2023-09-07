@@ -4,6 +4,7 @@ package net.study.functional.hw.oop
 import net.study.functional.hw.oop.handler.SignUpRequestHandler
 import net.study.functional.hw.oop.mappers.Mappers
 import net.study.functional.hw.oop.request.SignUpRequest
+import net.study.functional.hw.oop.services.HashService
 
 object HomeTask4 extends App with Mappers {
 
@@ -15,6 +16,7 @@ object HomeTask4 extends App with Mappers {
     3) implement processor(only simple stub which immediately returns OK answer)
     Write test for validator and mapper components
    */
+  override val hashService: HashService = new HashService
 
   val signUpRequest = SignUpRequest(
     Some("name"),

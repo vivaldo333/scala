@@ -1,15 +1,12 @@
 package net.study.functional.hw.oop.validator
 
 import net.study.functional.hw.oop.errors.{EmptyStringError, Error, ValidationError}
-import net.study.functional.hw.oop.services.LoginService
 
 import scala.util.matching.Regex
 
 // Here you can declare all supplementary method for validation with style below(or use your own signature and return type
 // if you want)
 object ValidatorUtil {
-
-  val loginService = new LoginService
 
   def validateStringEmptyParam(paramName: String, maybeStringEmpty: Option[String]): Either[ValidationError, Unit] = {
     if (isEmpty(maybeStringEmpty)) Left(getValidationError(paramName, EmptyStringError))
@@ -46,10 +43,6 @@ object ValidatorUtil {
   def isNotLatinAndOrDigits(text: Option[String]): Boolean = {
     val latinAndDigitsPattern = "^[A-Za-z0-9]+$".r
     !matchPattern(text, latinAndDigitsPattern)
-  }
-
-  def isNotUniqueAcrossService(text: Option[String]): Boolean = {
-    !text.exists(text => loginService.checkUniqueness(text))
   }
 
   def isNotPhoneLength(text: Option[String]): Boolean = {

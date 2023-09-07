@@ -4,6 +4,7 @@ import net.study.functional.hw.oop.dto.{SignInDto, SignUpDto, WorkInfoInDto}
 import net.study.functional.hw.oop.errors.{Error, GlobalError, MapperError}
 import net.study.functional.hw.oop.exception.MapperException
 import net.study.functional.hw.oop.request.{SignInRequest, SignUpRequest, WorkInfoRequest}
+import net.study.functional.hw.oop.services.HashService
 
 import scala.util.Try
 
@@ -12,6 +13,8 @@ private[oop] trait Mapper[R, DTO] {
 }
 
 private[oop] trait SignUpRequestMapper extends Mapper[SignUpRequest, SignUpDto] with Mappers {
+  override val hashService: HashService = new HashService
+
   override def map(request: SignUpRequest)(implicit defaultMapper: SignUpRequest => SignUpDto): Either[Error, SignUpDto] =
     (Try(defaultMapper(request)) toEither).left.map {
       case _: MapperException => MapperError

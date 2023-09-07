@@ -7,7 +7,7 @@ import net.study.functional.hw.oop.services.HashService
 // here you can assign your implicit mapper function  implement this trait with your logic
 trait Mappers {
 
-  lazy val hashService = new HashService()
+  val hashService: HashService
 
   // implement this
   implicit val signUpRequestMapper: SignUpRequest => SignUpDto = (request: SignUpRequest) => {

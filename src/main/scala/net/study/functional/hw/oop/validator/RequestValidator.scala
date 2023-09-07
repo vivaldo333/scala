@@ -2,6 +2,7 @@ package net.study.functional.hw.oop.validator
 
 import net.study.functional.hw.oop.errors.{EmptyStringError, Error, NonLatinOrAndDigitsSymbolsError, NonLatinSymbolsError, NonUniqueAcrossServiceError, NonValidPhoneLength, NotOnlyDigitsError}
 import net.study.functional.hw.oop.request.{SignInRequest, SignUpRequest, WorkInfoRequest}
+import net.study.functional.hw.oop.services.LoginService
 import net.study.functional.hw.oop.validator.RequestValidator.{Login, Msisdn, Name, Surname}
 import net.study.functional.hw.oop.validator.ValidatorUtil.validateParam
 
@@ -24,6 +25,7 @@ object RequestValidator {
 }
 
 trait SignUpRequestValidator extends RequestValidator[SignUpRequest] {
+  val loginService: LoginService = new LoginService
   override def validate(request: SignUpRequest): Either[Error, SignUpRequest] = {
     val validationResult = List(
       validateParam(request.name, ValidatorUtil.isEmpty, Name+0, EmptyStringError),
@@ -32,7 +34,7 @@ trait SignUpRequestValidator extends RequestValidator[SignUpRequest] {
       validateParam(request.surname, ValidatorUtil.isNotOnlyLatinCharacters, Surname+1, NonLatinSymbolsError),
       validateParam(request.login, ValidatorUtil.isEmpty, Login+0, EmptyStringError),
       validateParam(request.login, ValidatorUtil.isNotLatinAndOrDigits, Login+1, NonLatinOrAndDigitsSymbolsError),
-      validateParam(request.login, ValidatorUtil.isNotUniqueAcrossService, Login+3, NonUniqueAcrossServiceError),
+      validateParam(request.login, isNotUniqueAcrossService, Login+3, NonUniqueAcrossServiceError),
       validateParam(request.msisdn, ValidatorUtil.isEmpty, Msisdn+0, EmptyStringError),
       validateParam(request.msisdn, ValidatorUtil.isNotOnlyDigits, Msisdn+1, NotOnlyDigitsError),
       validateParam(request.msisdn, ValidatorUtil.isNotPhoneLength, Msisdn+3, NonValidPhoneLength)
@@ -43,6 +45,10 @@ trait SignUpRequestValidator extends RequestValidator[SignUpRequest] {
       case Nil => Right(request)
       case /*::(head, tl)*/ head :: tl => Left(tl.foldLeft(head)(_+_))
     }
+  }
+
+  private[validator] def isNotUniqueAcrossService(text: Option[String]): Boolean = {
+    !text.exists(text => loginService.checkUniqueness(text))
   }
 }
 
