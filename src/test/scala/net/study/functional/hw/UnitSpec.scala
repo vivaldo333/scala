@@ -1,14 +1,15 @@
 package net.study.functional.hw
 
 import org.scalamock.scalatest.MockFactory
-import org.scalatest.{BeforeAndAfter, BeforeAndAfterEach, FunSuite, GivenWhenThen, Ignore, Matchers, OptionValues, PartialFunctionValues, WordSpec}
+import org.scalatest.{BeforeAndAfter, BeforeAndAfterEach, EitherValues, FunSuite, GivenWhenThen, Ignore, Matchers, OptionValues, PartialFunctionValues, WordSpec}
 
 //https://www.baeldung.com/scala/scalatest
 //https://www.scalatest.org/user_guide
 abstract class UnitSpec extends FunSuite
   with GivenWhenThen with Matchers with OptionValues
   with BeforeAndAfter with BeforeAndAfterEach
-  with MockFactory with PartialFunctionValues {
+  with MockFactory with PartialFunctionValues
+  with EitherValues {
 
   /*val builder = new StringBuilder
 
