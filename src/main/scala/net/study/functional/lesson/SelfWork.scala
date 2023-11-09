@@ -1,5 +1,7 @@
 package net.study.functional.lesson
 
+import scala.annotation.tailrec
+
 object SelfWork extends App {
 
   /// odd sum event sum
